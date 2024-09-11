@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.awt.*;
 
-import static com.perjetperso.jajaaventure.Cards.createCard;
+
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -36,6 +36,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
         Skin buttonSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
@@ -122,17 +123,19 @@ public class Main extends ApplicationAdapter {
         stage.act();
         stage.draw();
         if(showAllCards){
+            Stage stageAllCards = new Stage(new ScreenViewport());
+            Gdx.input.setInputProcessor(stageAllCards);
             ScreenUtils.clear(217/ 255f, 142/ 255f, 4/ 255f, 1);
-            createCard("my first card",1,1,"This means my card run well");
+            Cards the_first_card = new Cards("\n\nmy first card",1,1,"this is my first card\n in Jaja Aventure");
+            the_first_card.show(stageAllCards);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            stageAllCards.act(Gdx.graphics.getDeltaTime());
+            stageAllCards.draw();
         }
         if(showMyCards){
 
         }
         if(gameStarted){
-            String hexColor = "D98E04";//couleur de Shiba Inu Rouge
-            int red = Integer.parseInt(hexColor.substring(0, 2), 16);//217
-            int green = Integer.parseInt(hexColor.substring(2, 4), 16);//142
-            int blue = Integer.parseInt(hexColor.substring(4, 6), 16);//4
             ScreenUtils.clear(217/ 255f, 142/ 255f, 4/ 255f, 1);
         }
 
@@ -143,6 +146,8 @@ public class Main extends ApplicationAdapter {
 //        batch.draw(image, 140, 210);
 //        batch.end();
     }
+
+
 
     @Override
     public void dispose() {

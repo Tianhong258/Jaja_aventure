@@ -1,12 +1,12 @@
 package com.perjetperso.jajaaventure;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
-import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.table;
 
 public class Cards {
     private String title;
@@ -14,56 +14,59 @@ public class Cards {
     private int cost;
     private String description;
 
+    public Cards(String title, int attack, int cost, String description) {
+        this.title = title;
+        this.attack = attack;
+        this.cost = cost;
+        this.description = description;
+    }
 
-    public static void createCard(String title, int attack, int cost, String description){
-            Table table = new Table();
-        BackgroundColor background = new BackgroundColor("card_base.png",3,60,80,160);
-        table.setBackground(background);
-            /* Adds the "Cost" label and centers its text. */
-            table.add("Cost").width(75).height(75).getActor().setAlignment(Align.center);
-            /* Important! Adds a column between "Cost" and "S". Used to
-             * align "Image", "Title", "Description", and "Class". */
-            table.add();
-            /* Same as "Cost". */
-            table.add("S").width(75).height(75).getActor().setAlignment(Align.center);
-            table.row();
+    public void show(Stage stage){
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Table cardTable = new Table();
 
+        Texture cardTexture = new Texture(Gdx.files.internal("card_base.png"));
+        Drawable cardDrawable = new Image(cardTexture).getDrawable();
+
+        // Créer une image à partir de la texture
+        Image cardImage = new Image(cardDrawable);
+
+
+
+        // Créer une table pour les informations de la carte
+        Table infoTable = new Table();
+
+        Label cardName = new Label(title, skin);
+        Label cardDescription = new Label(description, skin);
+        Label cardCost = new Label(cost + "", skin);
+        Label cardAttack = new Label(attack + "", skin);
+
+        infoTable.add(cardCost).height(75).growX().getActor().setAlignment(Align.left);
+        infoTable.row();
             /* Add "Image" to middle column with a height of 50% of the
              * background's height minus 75 (the top columns height). */
-            table.add();
-            table.add("Image").growX().height(80 - 75)
-                .getActor().setAlignment(Align.center);
-            table.add();
-            table.row();
-
+        infoTable.row();
             /* Add "Title".*/
-            table.add();
-            table.add("Title").grow().getActor().setAlignment(Align.center);
-            table.add();
-            table.row();
-
+        infoTable.add(cardName).grow().getActor().setAlignment(Align.center);
+        infoTable.row();
             /* Add "Description". */
-            table.add();
-            table.add("Description").grow().getActor().setAlignment(Align.center);
-            table.add();
-            table.row();
+        infoTable.add(cardDescription).grow().getActor().setAlignment(Align.center);
+        infoTable.row();
 
-            /* Add "Life", "Class", and "Attack". Same deal as "Cost" and
-             * "S" */
-            table.add("Life").width(75).height(75).getActor().setAlignment(Align.center);
-            table.add("Class").growX().fillY().getActor().setAlignment(Align.center);
-            table.add("Attack").width(75).height(75).getActor().setAlignment(Align.center);
+        final Stack stack = new Stack(cardImage, infoTable);
+        stack.setSize(cardImage.getWidth(), cardImage.getHeight());
+        stage.addActor(stack);
+        stage.setDebugAll(true);
+        //stage.addActor(cardImage); // Ajouter l'image en premier (arrière-plan)
+        //stage.addActor(infoTable);
 
-            /* Used to show the table above the background image. You
-             * should probably use Table#setBackground(drawable)
-             * instead of using a stack! */
-//            final Stack stack = new Stack(background, table);
-//            stack.setSize(background.getWidth(), background.getHeight());
-//        Stage stage = null;
-//        stage.addActor(stack);
+        // ou Positionner infoTable sur l'image de la carte comme ça ?
+//        infoTable.add(costLabel).expandX().left().pad(10);
+//        infoTable.row(); // Aller à la ligne suivante
+//        infoTable.add(descriptionLabel).expandX().left().pad(10);
+//        infoTable.setPosition(cardImage.getX() + 20, cardImage.getY() + 150); // Ajuster les positions selon les besoins
+//    }
 
-            /*Shows the green and red outlines. ONLY FOR DEBUGGING!*/
-            //stage.setDebugAll(true);
         }
 }
 
