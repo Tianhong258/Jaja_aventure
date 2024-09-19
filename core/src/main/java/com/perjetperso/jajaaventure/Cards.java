@@ -11,63 +11,101 @@ import com.badlogic.gdx.utils.Align;
 public class Cards {
     private String title;
     private int attack;
+    private int healingAmount;
+    private String image;
     private int cost;
-    private String description;
 
-    public Cards(String title, int attack, int cost, String description) {
+
+    public Cards(String title, int attack, int healingAmount, String image, int cost) {
         this.title = title;
         this.attack = attack;
-        this.cost = cost;
-        this.description = description;
+        this.healingAmount = healingAmount == 0 ? 0 : healingAmount;
+        this.image = image == null ? "Cette carte \nn'a pas d'image" : image;
+        this.cost = cost == 0 ? 1 : cost;
+
     }
 
     public void show(Stage stage){
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Table cardTable = new Table();
-
         Texture cardTexture = new Texture(Gdx.files.internal("card_base.png"));
         Drawable cardDrawable = new Image(cardTexture).getDrawable();
 
         // Créer une image à partir de la texture
         Image cardImage = new Image(cardDrawable);
-
-
-
         // Créer une table pour les informations de la carte
         Table infoTable = new Table();
 
         Label cardName = new Label(title, skin);
-        Label cardDescription = new Label(description, skin);
+        Label cardPhoto = new Label(image, skin);
         Label cardCost = new Label(cost + "", skin);
-        Label cardAttack = new Label(attack + "", skin);
+        Label cardEffect = new Label("Deal " + attack + " damage, \nrestore " +healingAmount +" health.", skin);
 
-        infoTable.add(cardCost).height(75).growX().getActor().setAlignment(Align.left);
+
+        infoTable.add(cardCost).height(60).growX().getActor().setAlignment(Align.center);
         infoTable.row();
-            /* Add "Image" to middle column with a height of 50% of the
-             * background's height minus 75 (the top columns height). */
+        infoTable.add(cardPhoto).height(90).growX().getActor().setAlignment(Align.center);
         infoTable.row();
-            /* Add "Title".*/
-        infoTable.add(cardName).grow().getActor().setAlignment(Align.center);
+        infoTable.add(cardName).height(40).growX().getActor().setAlignment(Align.center);
         infoTable.row();
-            /* Add "Description". */
-        infoTable.add(cardDescription).grow().getActor().setAlignment(Align.center);
+        infoTable.add(cardEffect).grow().getActor().setAlignment(Align.center);
         infoTable.row();
+
 
         final Stack stack = new Stack(cardImage, infoTable);
         stack.setSize(cardImage.getWidth(), cardImage.getHeight());
+        stack.setPosition(200,80);
         stage.addActor(stack);
         stage.setDebugAll(true);
-        //stage.addActor(cardImage); // Ajouter l'image en premier (arrière-plan)
-        //stage.addActor(infoTable);
 
         // ou Positionner infoTable sur l'image de la carte comme ça ?
-//        infoTable.add(costLabel).expandX().left().pad(10);
-//        infoTable.row(); // Aller à la ligne suivante
-//        infoTable.add(descriptionLabel).expandX().left().pad(10);
 //        infoTable.setPosition(cardImage.getX() + 20, cardImage.getY() + 150); // Ajuster les positions selon les besoins
 //    }
 
         }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getHealingAmount() {
+        return healingAmount;
+    }
+
+
+
+    public void setHealingAmount(int healingAmount) {
+        this.healingAmount = healingAmount;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+
 }
 
 
